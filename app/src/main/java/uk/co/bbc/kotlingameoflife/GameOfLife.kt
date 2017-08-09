@@ -1,6 +1,21 @@
 package uk.co.bbc.kotlingameoflife
 
-data class Cell(val x: Int, val y: Int)
+data class Cell(val x: Int, val y: Int) {
+
+    val left: Cell get() { return Cell(this.x-1, this.y) }
+    val right: Cell get() { return Cell(this.x+1, this.y) }
+    val above: Cell get() { return Cell(this.x, this.y-1) }
+    val below: Cell get() { return Cell(this.x, this.y+1) }
+
+    fun allNeighbours(): Set<Cell> {
+        return setOf(
+                this.above.left, this.above, this.above.right,
+                this.left, this.right,
+                this.below.left, this.below, this.below.right
+        )
+    }
+
+}
 
 class Generation(val liveCells: Set<Cell>) {
 
@@ -23,23 +38,4 @@ private fun List<Cell>.toGeneration(): Generation {
     return Generation(this.toSet())
 }
 
-fun Cell.allNeighbours(): Set<Cell> {
-    return setOf(
-            this.above.left, this.above, this.above.right,
-            this.left, this.right,
-            this.below.left, this.below, this.below.right
-    )
-}
-
-val Cell.below: Cell
-    get() { return Cell(this.x, this.y+1) }
-
-val Cell.right: Cell
-    get() { return Cell(this.x+1, this.y) }
-
-val Cell.left: Cell
-    get() { return Cell(this.x-1, this.y) }
-
-val Cell.above: Cell
-    get() { return Cell(this.x, this.y-1) }
 
